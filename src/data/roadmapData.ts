@@ -1,0 +1,253 @@
+import { KnowledgeCategory } from '@/types/roadmap';
+
+export const roadmapData: KnowledgeCategory[] = [
+  {
+    id: 'internet',
+    title: 'Internet',
+    status: 'pending',
+    description: '互联网是由使用 TCP/IP 协议互连的计算机组成的全球网络，连接着全球数十亿台设备。它彻底改变了通信、商业、教育和娱乐领域。它支持网页浏览、流媒体播放和各种应用，同时也带来了隐私和安全方面的挑战。',
+    items: [
+      { 
+        id: 'internet-1', 
+        title: 'How does the internet work?', 
+        status: 'pending',
+        description: '互联网是一个全球性的计算机网络系统，它使用标准化的通信协议（主要是 TCP/IP）来连接世界各地的设备。数据通过路由器和交换机在网络中传输，被分割成小的数据包，然后在目的地重新组装。',
+        resources: [
+          {
+            title: '互联网简介',
+            url: 'https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/How_does_the_Internet_work',
+            type: 'article',
+          },
+        ],
+      },
+      { 
+        id: 'internet-2', 
+        title: 'What is HTTP?', 
+        status: 'pending',
+        description: 'HTTP（超文本传输协议）是一个用于传输超媒体文档（如HTML）的应用层协议。它是为 Web 浏览器和 Web 服务器之间的通信而设计的，但也可用于其他目的。HTTP 遵循经典的客户端-服务器模型。',
+        resources: [
+          {
+            title: 'HTTP 概述 - MDN',
+            url: 'https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview',
+            type: 'documentation',
+          },
+          {
+            title: 'HTTP 详解',
+            url: 'https://www.ruanyifeng.com/blog/2016/08/http.html',
+            type: 'article',
+          },
+        ],
+      },
+      { 
+        id: 'internet-3', 
+        title: 'What is Domain Name?', 
+        status: 'pending',
+        description: '域名是用于识别和定位互联网上计算机的字符串。它为 IP 地址提供了一个易于记忆的名称，例如 google.com 而不是 142.250.185.46。域名由域名系统（DNS）管理。',
+        resources: [
+          {
+            title: '什么是域名？',
+            url: 'https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_is_a_domain_name',
+            type: 'article',
+          },
+        ],
+      },
+      { 
+        id: 'internet-4', 
+        title: 'What is hosting?', 
+        status: 'pending',
+        description: 'Web 托管是一种服务，它使组织和个人能够将网站或网页发布到互联网上。Web 主机或 Web 托管服务提供商提供在称为 Web 服务器的服务器上存储网站文件所需的技术和服务。',
+        resources: [
+          {
+            title: '什么是网络托管？',
+            url: 'https://aws.amazon.com/cn/what-is/web-hosting/',
+            type: 'article',
+          },
+        ],
+      },
+      { 
+        id: 'internet-5', 
+        title: 'DNS and how it works?', 
+        status: 'pending',
+        description: 'DNS（域名系统）是互联网的电话簿。人们通过域名（如 google.com）访问信息，而 Web 浏览器通过 IP 地址进行交互。DNS 将域名转换为 IP 地址，以便浏览器可以加载互联网资源。',
+        resources: [
+          {
+            title: 'DNS 工作原理',
+            url: 'https://aws.amazon.com/cn/route53/what-is-dns/',
+            type: 'article',
+          },
+        ],
+      },
+      { 
+        id: 'internet-6', 
+        title: 'Browsers and how they work?', 
+        status: 'pending',
+        description: '浏览器是用于访问万维网上信息的软件应用程序。当用户从 Web 服务器请求网页时，浏览器从服务器检索必要的内容并将其显示在用户的设备上。浏览器解析 HTML、CSS 和 JavaScript 以呈现网页。',
+        resources: [
+          {
+            title: '浏览器的工作原理',
+            url: 'https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work',
+            type: 'article',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'html',
+    title: 'HTML',
+    status: 'pending',
+    description: 'HTML（超文本标记语言）是用于创建网页的标准标记语言。它描述了网页的结构，并告诉浏览器如何显示内容。',
+    items: [
+      { id: 'html-1', title: 'HTML 基础语法', status: 'pending', description: '学习 HTML 标签、元素、属性的基本概念和使用方法。' },
+      { id: 'html-2', title: '语义化标签', status: 'pending', description: '了解 header, nav, main, section, article, footer 等语义化标签。' },
+      { id: 'html-3', title: '表单和输入', status: 'pending', description: '掌握各种表单元素和输入验证。' },
+      { id: 'html-4', title: 'SEO 优化', status: 'pending', description: '学习如何编写对搜索引擎友好的 HTML。' },
+      { id: 'html-5', title: '可访问性 (Accessibility)', status: 'pending', description: '了解 ARIA 属性和无障碍设计最佳实践。' },
+    ],
+  },
+  {
+    id: 'css',
+    title: 'CSS',
+    status: 'pending',
+    description: 'CSS（层叠样式表）是一种样式表语言，用于描述以 HTML 或 XML 编写的文档的呈现。CSS 描述了元素应如何在屏幕、纸张、语音或其他媒体上呈现。',
+    items: [
+      { id: 'css-1', title: 'CSS 基础', status: 'pending', description: '选择器、属性、值、盒模型等基础概念。' },
+      { id: 'css-2', title: 'Flexbox 布局', status: 'pending', description: '掌握弹性盒子布局的使用方法。' },
+      { id: 'css-3', title: 'Grid 布局', status: 'pending', description: '学习 CSS Grid 网格布局系统。' },
+      { id: 'css-4', title: '响应式设计', status: 'pending', description: '媒体查询、移动优先设计、断点设置。' },
+      { id: 'css-5', title: 'CSS 预处理器', status: 'pending', description: 'Sass, Less 等预处理器的使用。' },
+      { id: 'css-6', title: '动画和过渡', status: 'pending', description: 'CSS Transitions, Animations, Transform。' },
+    ],
+  },
+  {
+    id: 'javascript',
+    title: 'JavaScript',
+    status: 'pending',
+    description: 'JavaScript 是一种高级的、解释型的编程语言。它是 Web 的核心技术之一，与 HTML 和 CSS 一起。JavaScript 使网页具有交互性。',
+    items: [
+      { id: 'js-1', title: 'JavaScript 基础', status: 'pending', description: '变量、数据类型、运算符、控制流。' },
+      { id: 'js-2', title: '函数和作用域', status: 'pending', description: '函数声明、箭头函数、闭包、作用域链。' },
+      { id: 'js-3', title: 'DOM 操作', status: 'pending', description: '选择元素、修改内容、事件处理。' },
+      { id: 'js-4', title: 'ES6+ 特性', status: 'pending', description: 'let/const, 解构, 扩展运算符, Promise, async/await。' },
+      { id: 'js-5', title: '异步编程', status: 'pending', description: '回调、Promise、async/await、事件循环。' },
+      { id: 'js-6', title: '面向对象编程', status: 'pending', description: '类、继承、原型链、this 关键字。' },
+    ],
+  },
+  {
+    id: 'version-control',
+    title: 'Version Control',
+    status: 'pending',
+    description: '版本控制系统用于跟踪代码变化，协作开发，管理项目历史。Git 是最流行的分布式版本控制系统。',
+    items: [
+      { id: 'git-1', title: 'Git 基础', status: 'pending', description: 'git init, add, commit, push, pull 等基本命令。' },
+      { id: 'git-2', title: '分支管理', status: 'pending', description: '创建、切换、合并、删除分支。' },
+      { id: 'git-3', title: 'GitHub/GitLab', status: 'pending', description: 'Pull Request, Code Review, Issues。' },
+    ],
+  },
+  {
+    id: 'package-manager',
+    title: 'Package Manager',
+    status: 'pending',
+    description: '包管理器用于安装、更新、管理项目依赖。npm 和 yarn 是最常用的 JavaScript 包管理器。',
+    items: [
+      { id: 'pkg-1', title: 'npm 基础', status: 'pending', description: '安装包、管理依赖、scripts 脚本。' },
+      { id: 'pkg-2', title: 'package.json', status: 'pending', description: '理解依赖配置、版本管理。' },
+    ],
+  },
+  {
+    id: 'browser',
+    title: 'Browser',
+    status: 'pending',
+    description: '深入理解浏览器的工作原理、渲染过程、存储机制和开发者工具的使用。',
+    items: [
+      { id: 'browser-1', title: '浏览器渲染原理', status: 'pending', description: 'DOM 树、CSSOM 树、渲染树、回流和重绘。' },
+      { id: 'browser-2', title: '浏览器缓存', status: 'pending', description: 'HTTP 缓存、LocalStorage、SessionStorage、IndexedDB。' },
+      { id: 'browser-3', title: 'Cookie 和 Session', status: 'pending', description: '理解 Cookie 的工作机制和会话管理。' },
+      { id: 'browser-4', title: '浏览器 API', status: 'pending', description: 'Fetch, WebSocket, Geolocation, Notification 等 API。' },
+      { id: 'browser-5', title: '开发者工具', status: 'pending', description: 'Chrome DevTools 的使用和调试技巧。' },
+    ],
+  },
+  {
+    id: 'network',
+    title: 'Network',
+    status: 'pending',
+    description: '网络协议和通信是前端开发的重要基础，包括 HTTP/HTTPS、WebSocket、RESTful API 等。',
+    items: [
+      { id: 'network-1', title: 'HTTP/HTTPS 协议', status: 'pending', description: '请求方法、状态码、请求头、响应头。' },
+      { id: 'network-2', title: 'RESTful API', status: 'pending', description: 'REST 架构风格和 API 设计原则。' },
+      { id: 'network-3', title: 'AJAX 和 Fetch', status: 'pending', description: '异步数据请求和 Fetch API 使用。' },
+      { id: 'network-4', title: 'WebSocket', status: 'pending', description: '实时双向通信协议。' },
+      { id: 'network-5', title: 'CORS 跨域', status: 'pending', description: '跨域资源共享的原理和解决方案。' },
+    ],
+  },
+  {
+    id: 'framework',
+    title: 'Framework',
+    status: 'pending',
+    description: '现代前端框架提供了组件化、状态管理、路由等功能，极大提升了开发效率。',
+    items: [
+      { id: 'framework-1', title: 'React 基础', status: 'pending', description: '组件、Props、State、生命周期、Hooks。' },
+      { id: 'framework-2', title: 'Vue 基础', status: 'pending', description: '模板语法、指令、组件、计算属性、侦听器。' },
+      { id: 'framework-3', title: '状态管理', status: 'pending', description: 'Redux, Zustand, Pinia, Vuex。' },
+      { id: 'framework-4', title: '路由管理', status: 'pending', description: 'React Router, Vue Router。' },
+    ],
+  },
+  {
+    id: 'build-tools',
+    title: 'Build Tools',
+    status: 'pending',
+    description: '构建工具用于打包、编译、优化前端代码，是现代前端工程化的重要组成部分。',
+    items: [
+      { id: 'build-1', title: 'Webpack', status: 'pending', description: '模块打包、loader、plugin 配置。' },
+      { id: 'build-2', title: 'Vite', status: 'pending', description: '快速的开发服务器和构建工具。' },
+      { id: 'build-3', title: 'Babel', status: 'pending', description: 'JavaScript 编译器和转译器。' },
+    ],
+  },
+  {
+    id: 'performance',
+    title: 'Performance',
+    status: 'pending',
+    description: 'Web 性能优化是提升用户体验的关键，包括加载速度、运行性能、资源优化等方面。',
+    items: [
+      { id: 'perf-1', title: '性能指标', status: 'pending', description: 'FCP, LCP, TTI, CLS 等核心指标。' },
+      { id: 'perf-2', title: '代码分割', status: 'pending', description: 'Code Splitting, Lazy Loading。' },
+      { id: 'perf-3', title: '图片优化', status: 'pending', description: '压缩、格式选择、懒加载、响应式图片。' },
+      { id: 'perf-4', title: '缓存策略', status: 'pending', description: '浏览器缓存、CDN、Service Worker。' },
+    ],
+  },
+  {
+    id: 'security',
+    title: 'Web Security',
+    status: 'pending',
+    description: 'Web 安全是前端开发中不可忽视的重要领域，需要了解常见的安全威胁和防护措施。',
+    items: [
+      { id: 'security-1', title: 'XSS 攻击防御', status: 'pending', description: '跨站脚本攻击的原理和防护。' },
+      { id: 'security-2', title: 'CSRF 攻击防御', status: 'pending', description: '跨站请求伪造的原理和防护。' },
+      { id: 'security-3', title: 'HTTPS 和加密', status: 'pending', description: 'SSL/TLS, 数据加密传输。' },
+      { id: 'security-4', title: '内容安全策略', status: 'pending', description: 'CSP (Content Security Policy) 配置。' },
+    ],
+  },
+  {
+    id: 'typescript',
+    title: 'TypeScript',
+    status: 'pending',
+    description: 'TypeScript 是 JavaScript 的超集，添加了静态类型检查，提高代码质量和开发效率。',
+    items: [
+      { id: 'ts-1', title: 'TypeScript 基础', status: 'pending', description: '类型注解、接口、类型别名。' },
+      { id: 'ts-2', title: '高级类型', status: 'pending', description: '泛型、联合类型、交叉类型、类型守卫。' },
+      { id: 'ts-3', title: 'TypeScript 配置', status: 'pending', description: 'tsconfig.json 配置和编译选项。' },
+    ],
+  },
+  {
+    id: 'testing',
+    title: 'Testing',
+    status: 'pending',
+    description: '测试是保证代码质量的重要手段，包括单元测试、集成测试、端到端测试等。',
+    items: [
+      { id: 'test-1', title: '单元测试', status: 'pending', description: 'Jest, Vitest 单元测试框架。' },
+      { id: 'test-2', title: '组件测试', status: 'pending', description: 'React Testing Library, Vue Test Utils。' },
+      { id: 'test-3', title: 'E2E 测试', status: 'pending', description: 'Cypress, Playwright 端到端测试。' },
+    ],
+  },
+];
+
