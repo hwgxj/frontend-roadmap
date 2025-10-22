@@ -8,12 +8,15 @@ interface ActionBarProps {
   data: KnowledgeCategory[];
   onImport: (data: KnowledgeCategory[]) => void;
   onReset: () => void;
+  onManualSync?: () => void;
+  isSyncing?: boolean;
 }
 
-export default function ActionBar({ data, onImport, onReset }: ActionBarProps) {
+export default function ActionBar({ data, onImport, onReset, onManualSync, isSyncing }: ActionBarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   // 点击外部关闭菜单
   useEffect(() => {
@@ -32,79 +35,88 @@ export default function ActionBar({ data, onImport, onReset }: ActionBarProps) {
     };
   }, [showExportMenu]);
 
-  // 导出为 JSON
-  const handleExportJSON = () => {
-    const dataStr = JSON.stringify(data, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    downloadFile(blob, `frontend-roadmap-${getDateString()}.json`);
-    setShowExportMenu(false);
-  };
-
-  // 导出为 Markdown
-  const handleExportMarkdown = () => {
-    let markdown = '# 前端知识路线图 - 学习进度\n\n';
-    markdown += `导出时间：${new Date().toLocaleString('zh-CN')}\n\n`;
-    
-    // 统计数据
-    const stats = calculateStats(data);
-    markdown += '## 📊 学习统计\n\n';
-    markdown += `- 总知识点：${stats.total}\n`;
-    markdown += `- 已完成：${stats.completed}\n`;
-    markdown += `- 学习中：${stats.inProgress}\n`;
-    markdown += `- 已跳过：${stats.skipped}\n`;
-    markdown += `- 完成率：${stats.completionRate}%\n\n`;
-    
-    markdown += '---\n\n';
-    
-    // 各分类详情
-    data.forEach(category => {
-      const statusEmoji = getStatusEmoji(category.status);
-      markdown += `## ${statusEmoji} ${category.title}\n\n`;
-      
-      if (category.description) {
-        markdown += `> ${category.description}\n\n`;
-      }
-      
-      if (category.items.length > 0) {
-        category.items.forEach(item => {
-          const itemEmoji = getStatusEmoji(item.status);
-          const checkbox = item.status === 'completed' ? '[x]' : '[ ]';
-          markdown += `- ${checkbox} ${itemEmoji} **${item.title}**\n`;
-          if (item.description) {
-            markdown += `  - ${item.description}\n`;
-          }
-        });
-        markdown += '\n';
-      }
-    });
-    
-    markdown += '---\n\n';
-    markdown += '*由前端知识路线图生成*';
-    
-    const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
-    downloadFile(blob, `frontend-roadmap-${getDateString()}.md`);
-    setShowExportMenu(false);
-  };
-
-  // 导出为 CSV
-  const handleExportCSV = () => {
-    let csv = '分类,知识点,状态,描述\n';
-    
-    data.forEach(category => {
-      category.items.forEach(item => {
-        const status = getStatusLabel(item.status);
-        const description = item.description?.replace(/,/g, '，') || '';
-        csv += `"${category.title}","${item.title}","${status}","${description}"\n`;
+  // 🆕 使用 API 导出为 JSON
+  const handleExportJSON = async () => {
+    setIsExporting(true);
+    try {
+      const response = await fetch('/api/export/json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data, pretty: true }),
       });
-    });
-    
-    // 添加 BOM 以支持 Excel 正确显示中文
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
-    downloadFile(blob, `frontend-roadmap-${getDateString()}.csv`);
-    setShowExportMenu(false);
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        const blob = new Blob([result.content], { type: 'application/json' });
+        downloadFile(blob, result.fileName);
+      } else {
+        alert('❌ 导出失败');
+      }
+    } catch (error) {
+      console.error('导出失败:', error);
+      alert('❌ 导出失败');
+    } finally {
+      setIsExporting(false);
+      setShowExportMenu(false);
+    }
   };
 
-  // 导出为纯文本
+  // 🆕 使用 API 导出为 Markdown
+  const handleExportMarkdown = async () => {
+    setIsExporting(true);
+    try {
+      const response = await fetch('/api/export/markdown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data, includeStats: true }),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        const blob = new Blob([result.content], { type: 'text/markdown;charset=utf-8' });
+        downloadFile(blob, result.fileName);
+      } else {
+        alert('❌ 导出失败');
+      }
+    } catch (error) {
+      console.error('导出失败:', error);
+      alert('❌ 导出失败');
+    } finally {
+      setIsExporting(false);
+      setShowExportMenu(false);
+    }
+  };
+
+  // 🆕 使用 API 导出为 CSV
+  const handleExportCSV = async () => {
+    setIsExporting(true);
+    try {
+      const response = await fetch('/api/export/csv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data }),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        const blob = new Blob([result.content], { type: 'text/csv;charset=utf-8' });
+        downloadFile(blob, result.fileName);
+      } else {
+        alert('❌ 导出失败');
+      }
+    } catch (error) {
+      console.error('导出失败:', error);
+      alert('❌ 导出失败');
+    } finally {
+      setIsExporting(false);
+      setShowExportMenu(false);
+    }
+  };
+
+  // 导出为纯文本（保留本地版本作为备用）
   const handleExportText = () => {
     let text = '前端知识路线图 - 学习进度\n';
     text += '='.repeat(50) + '\n\n';
@@ -228,20 +240,33 @@ export default function ActionBar({ data, onImport, onReset }: ActionBarProps) {
     <div className="flex items-center gap-3 mb-6">
       <div className="flex-1">
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          💡 提示：数据自动保存在本地浏览器中
+          💡 提示：数据自动保存，每30秒同步到服务器
         </p>
       </div>
       
       <div className="flex gap-2">
+        {/* 🆕 手动同步按钮 */}
+        {onManualSync && (
+          <button
+            onClick={onManualSync}
+            disabled={isSyncing}
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors shadow-sm hover:shadow-md disabled:opacity-50"
+            title="立即同步到服务器"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline">{isSyncing ? '同步中...' : '同步'}</span>
+          </button>
+        )}
         {/* 导出按钮（下拉菜单） */}
         <div ref={menuRef} className="relative">
           <button
             onClick={() => setShowExportMenu(!showExportMenu)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-sm hover:shadow-md"
+            disabled={isExporting}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow-sm hover:shadow-md disabled:opacity-50"
             title="选择导出格式"
           >
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">导出</span>
+            <span className="hidden sm:inline">{isExporting ? '导出中...' : '导出'}</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${showExportMenu ? 'rotate-180' : ''}`} />
           </button>
 

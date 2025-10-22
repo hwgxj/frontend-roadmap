@@ -1,0 +1,18 @@
+{
+  "html-1": {
+    "itemId": "html-1",
+    "categoryId": "html",
+    "itemTitle": "HTML基础",
+    "content": "测试笔记",
+    "createdAt": "2025-10-14T09:57:57.806Z",
+    "updatedAt": "2025-10-14T09:57:57.806Z"
+  },
+  "pkg-1": {
+    "itemId": "pkg-1",
+    "categoryId": "package-manager",
+    "itemTitle": "npm 基础",
+    "content": "元神是世界上最伟大的游戏",
+    "createdAt": "2025-10-14T09:58:36.902Z",
+    "updatedAt": "2025-10-14T09:58:36.902Z"
+  }
+}

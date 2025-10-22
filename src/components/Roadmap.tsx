@@ -8,7 +8,9 @@ import DetailPanel from './DetailPanel';
 import StatisticsPanel from './StatisticsPanel';
 import SearchBar from './SearchBar';
 import ActionBar from './ActionBar';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import SaveStatusIndicator from './SaveStatusIndicator';
+import AIAssistant from './AIAssistant';
+import { useProgressSync } from '@/hooks/useProgressSync';
 
 interface RoadmapProps {
   data: KnowledgeCategory[];
@@ -26,8 +28,19 @@ type SelectedItem = {
 };
 
 export default function Roadmap({ data: initialData }: RoadmapProps) {
-  // 使用本地存储持久化数据
-  const [data, setData] = useLocalStorage<KnowledgeCategory[]>('roadmap-data', initialData);
+  // 🆕 使用自动同步到服务器的 Hook
+  const {
+    data,
+    setData,
+    isSyncing,
+    lastSyncTime,
+    syncStatus,
+    manualSync,
+  } = useProgressSync(initialData, {
+    autoSync: true,        // 启用自动同步
+    syncInterval: 30000,   // 每30秒同步一次
+  });
+  
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
   
   // 搜索和筛选状态
@@ -137,6 +150,31 @@ export default function Roadmap({ data: initialData }: RoadmapProps) {
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">Front-end</h1>
         <p className="text-gray-600 dark:text-gray-400">前端开发知识路线图</p>
+        
+        {/* 🆕 同步状态显示 */}
+        <div className="mt-3 flex items-center gap-3 text-sm">
+          <span className={`flex items-center gap-2 ${
+            syncStatus === 'syncing' ? 'text-blue-600' : 
+            syncStatus === 'success' ? 'text-green-600' : 
+            syncStatus === 'error' ? 'text-red-600' : 'text-gray-500'
+          }`}>
+            {isSyncing ? '🔄 同步中...' : 
+             syncStatus === 'success' ? '✅ 已同步到服务器' : 
+             syncStatus === 'error' ? '❌ 同步失败' : '💾 本地存储'}
+          </span>
+          {lastSyncTime && (
+            <span className="text-gray-400 text-xs">
+              最后同步: {new Date(lastSyncTime).toLocaleTimeString('zh-CN')}
+            </span>
+          )}
+          <button
+            onClick={manualSync}
+            disabled={isSyncing}
+            className="text-xs px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50 transition-colors"
+          >
+            立即同步
+          </button>
+        </div>
       </div>
 
       {/* 统计面板 */}
@@ -147,6 +185,8 @@ export default function Roadmap({ data: initialData }: RoadmapProps) {
         data={data}
         onImport={handleImport}
         onReset={handleReset}
+        onManualSync={manualSync}
+        isSyncing={isSyncing}
       />
 
       {/* 搜索和筛选 */}
@@ -230,10 +270,21 @@ export default function Roadmap({ data: initialData }: RoadmapProps) {
         <DetailPanel
           item={selectedItem.data}
           type={selectedItem.type}
+          categoryId={selectedItem.categoryId}
           onClose={() => setSelectedItem(null)}
           onStatusChange={handleDetailStatusChange}
         />
       )}
+
+      {/* 🆕 保存状态指示器 */}
+      <SaveStatusIndicator
+        isSyncing={isSyncing}
+        lastSyncTime={lastSyncTime}
+        syncStatus={syncStatus}
+      />
+
+      {/* 🤖 AI学习助手 - 传入路线图数据让AI了解用户进度 */}
+      <AIAssistant roadmapData={data} />
     </div>
   );
 }

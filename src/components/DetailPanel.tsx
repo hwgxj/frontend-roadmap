@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { KnowledgeItem, KnowledgeCategory, KnowledgeStatus } from '@/types/roadmap';
-import { X, FileText, ExternalLink, ChevronDown } from 'lucide-react';
+import { X, FileText, ExternalLink, ChevronDown, Save } from 'lucide-react';
+import { useNotes } from '@/hooks/useNotes';
 
 interface DetailPanelProps {
   item: KnowledgeItem | KnowledgeCategory;
   type: 'item' | 'category';
+  categoryId: string;
   onClose: () => void;
   onStatusChange: (status: KnowledgeStatus) => void;
 }
@@ -38,9 +40,27 @@ const statusConfig = {
   },
 };
 
-export default function DetailPanel({ item, type, onClose, onStatusChange }: DetailPanelProps) {
+export default function DetailPanel({ item, type, categoryId, onClose, onStatusChange }: DetailPanelProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  // 🆕 笔记功能
+  const { notes, saveNote, isLoading: isNotesLoading } = useNotes();
+  const [noteContent, setNoteContent] = useState('');
+  const [isSavingNote, setIsSavingNote] = useState(false);
+
+  // 🆕 加载笔记
+  useEffect(() => {
+    if (type === 'item') {
+      const itemId = (item as KnowledgeItem).id;
+      const note = notes[itemId];
+      if (note) {
+        setNoteContent(note.content);
+      } else {
+        setNoteContent('');
+      }
+    }
+  }, [item, type, notes]);
 
   // 点击外部关闭下拉菜单
   useEffect(() => {
@@ -58,6 +78,33 @@ export default function DetailPanel({ item, type, onClose, onStatusChange }: Det
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isDropdownOpen]);
+  
+  // 🆕 保存笔记到服务器
+  const handleSaveNote = async () => {
+    if (type !== 'item') return;
+    
+    setIsSavingNote(true);
+    try {
+      const itemId = (item as KnowledgeItem).id;
+      const success = await saveNote(
+        itemId,
+        noteContent,
+        categoryId,
+        item.title
+      );
+      
+      if (success) {
+        alert('✅ 笔记已保存到服务器');
+      } else {
+        alert('❌ 笔记保存失败');
+      }
+    } catch (error) {
+      console.error('保存笔记失败:', error);
+      alert('❌ 笔记保存失败');
+    } finally {
+      setIsSavingNote(false);
+    }
+  };
 
   const handleStatusClick = (status: KnowledgeStatus) => {
     onStatusChange(status);
@@ -192,6 +239,40 @@ export default function DetailPanel({ item, type, onClose, onStatusChange }: Det
             <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               <p>暂无详细信息</p>
               <p className="text-sm mt-2">你可以在数据文件中添加描述和学习资源</p>
+            </div>
+          )}
+
+          {/* 🆕 笔记功能（仅知识点）*/}
+          {type === 'item' && (
+            <div className="mt-8 border-t pt-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    📝 学习笔记
+                  </h3>
+                </div>
+                <button
+                  onClick={handleSaveNote}
+                  disabled={isSavingNote || isNotesLoading}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <Save className="w-4 h-4" />
+                  {isSavingNote ? '保存中...' : '保存到服务器'}
+                </button>
+              </div>
+              
+              <textarea
+                value={noteContent}
+                onChange={(e) => setNoteContent(e.target.value)}
+                placeholder="记录你的学习心得、笔记、问题等..."
+                className="w-full h-40 p-4 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
+                disabled={isNotesLoading}
+              />
+              
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                💾 笔记会自动保存到服务器，跨设备同步
+              </p>
             </div>
           )}
         </div>
